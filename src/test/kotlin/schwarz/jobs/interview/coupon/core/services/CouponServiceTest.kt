@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import schwarz.jobs.interview.coupon.BaseObject.baseCoupon
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
+import schwarz.jobs.interview.coupon.core.services.model.Basket
+import java.math.BigDecimal
 import java.util.Optional
 
 class CouponServiceTest {
@@ -25,5 +27,24 @@ class CouponServiceTest {
 
         verify { couponRepository.findByCode(any()) }
         Assertions.assertEquals(coupon.get().code, "coupon1")
+    }
+
+    @Test
+    fun `Should not apply coupon when basket value is below minBasketValue`() {
+
+        every {
+            couponRepository.findByCode("coupon1")
+        } returns Optional.of(baseCoupon)
+
+        val realCouponService = CouponService(couponRepository)
+        val basket = Basket(
+            value = BigDecimal("10.0"),
+            appliedDiscount = BigDecimal.ZERO,
+            applicationSuccessful = false,
+        )
+
+        val result = realCouponService.apply(basket, "coupon1")
+
+        Assertions.assertNull(result)
     }
 }

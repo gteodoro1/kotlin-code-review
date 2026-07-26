@@ -23,6 +23,10 @@ class CouponService(
         if (basket.value.toDouble() >= 0) {
 
             if (basket.value.toDouble() > 0) {
+                //FIXED: functional error not taking into account minBasketValue
+                if (basket.value < coupon.minBasketValue) {
+                    return null
+                }
                 basket.applyDiscount(coupon.discount)
             } else if (basket.value.toDouble() == 0.0) {
                 return basket
