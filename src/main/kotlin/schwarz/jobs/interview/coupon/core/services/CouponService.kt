@@ -17,12 +17,13 @@ class CouponService(
 
     fun apply(basket: Basket, code: String): Basket? {
 
-        val coupon = getCoupon(code) ?: error("No coupon found")
+        //FIXED: Since getCoupon returns optional we need to validate if the return has a coupon present
+        val coupon = getCoupon(code).orElseThrow { NoSuchElementException("No coupon found for code: $code") }
 
         if (basket.value.toDouble() >= 0) {
 
             if (basket.value.toDouble() > 0) {
-                basket.applyDiscount(coupon.get().discount)
+                basket.applyDiscount(coupon.discount)
             } else if (basket.value.toDouble() == 0.0) {
                 return basket
             }
