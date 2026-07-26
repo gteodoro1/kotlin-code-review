@@ -14,7 +14,8 @@ import java.util.Optional
 class CouponServiceTest {
 
     private val couponRepository = mockk<CouponRepository>()
-    private val couponService = mockk<CouponService>()
+    //FIXED: Use real service instance instead of mock
+    private val couponService = CouponService(couponRepository)
 
     @Test
     fun `Should get a coupon`() {
@@ -36,14 +37,13 @@ class CouponServiceTest {
             couponRepository.findByCode("coupon1")
         } returns Optional.of(baseCoupon)
 
-        val realCouponService = CouponService(couponRepository)
         val basket = Basket(
             value = BigDecimal("10.0"),
             appliedDiscount = BigDecimal.ZERO,
             applicationSuccessful = false,
         )
 
-        val result = realCouponService.apply(basket, "coupon1")
+        val result = couponService.apply(basket, "coupon1")
 
         Assertions.assertNull(result)
     }
