@@ -1,5 +1,6 @@
 package schwarz.jobs.interview.coupon.core.services
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import schwarz.jobs.interview.coupon.core.domain.Coupon
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
@@ -12,6 +13,8 @@ import java.util.Optional
 class CouponService(
     private val couponRepository: CouponRepository
 ) {
+
+    private val logger = LoggerFactory.getLogger(CouponService::class.java)
 
     fun getCoupon(code: String) : Optional<Coupon> = couponRepository.findByCode(code)
 
@@ -32,7 +35,8 @@ class CouponService(
                 return basket
             }
         } else {
-            println("DEBUG: TRIED TO APPLY NEGATIVE DISCOUNT!")
+            //FIXED: Remove print ln and use Logger instead
+            logger.warn("Tried to apply negative discount to basket with value {}", basket.value)
             throw RuntimeException("Can't apply negative discounts")
         }
         return basket
