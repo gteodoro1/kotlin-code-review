@@ -57,7 +57,8 @@ class CouponService(
     fun getCoupons(couponRequestDto: CouponRequestDto): MutableList<Coupon> {
 
         val foundCoupons = mutableListOf<Coupon>()
-        couponRequestDto.codes.forEach{ couponRepository.findByCode(it)!!.let { coupon -> foundCoupons.add(coupon.get()) } }
+        //FIXED: Skip not found codes instead of raising error
+        couponRequestDto.codes.forEach { couponRepository.findByCode(it).ifPresent { coupon -> foundCoupons.add(coupon) } }
         return foundCoupons
     }
 

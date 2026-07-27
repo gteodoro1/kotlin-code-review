@@ -10,6 +10,7 @@ import schwarz.jobs.interview.coupon.core.domain.Coupon
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
 import schwarz.jobs.interview.coupon.core.services.model.Basket
 import schwarz.jobs.interview.coupon.web.dto.CouponDto
+import schwarz.jobs.interview.coupon.web.dto.CouponRequestDto
 import java.math.BigDecimal
 import java.util.Optional
 
@@ -72,5 +73,21 @@ class CouponServiceTest {
         couponService.createCoupon(couponDto)
 
         verify { couponRepository.save(expectedCoupon) }
+    }
+
+    @Test
+    fun `getCoupons should return existing coupons only`() {
+
+        every {
+            couponRepository.findByCode("coupon1")
+        } returns Optional.of(baseCoupon)
+
+        every {
+            couponRepository.findByCode("unknown")
+        } returns Optional.empty()
+
+        val coupons = couponService.getCoupons(CouponRequestDto(codes = listOf("coupon1", "unknown")))
+
+        Assertions.assertEquals(listOf(baseCoupon), coupons)
     }
 }
