@@ -27,10 +27,10 @@ class CouponServiceTest {
             couponRepository.findByCode("coupon1")
         } returns Optional.of(baseCoupon)
 
-        val coupon = couponService.getCoupon("coupon1")!!
+        val coupon = couponService.getCoupon("coupon1")
 
         verify { couponRepository.findByCode(any()) }
-        Assertions.assertEquals(coupon.get().code, "coupon1")
+        Assertions.assertEquals("coupon1", coupon.get().code)
     }
 
     @Test

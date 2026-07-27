@@ -16,21 +16,21 @@ import java.math.BigDecimal
     sequenceName = "coupon_seq",
     allocationSize = 1000,
 )
-data class Coupon(
+class Coupon(
 
     @Id
     @GeneratedValue(
         strategy = GenerationType.SEQUENCE,
         generator = "CouponSequenceGenerator"
     )
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column(name = "code")
-    val code: String,
+    var code: String,
 
     @Column(name = "discount", precision = 10, scale = 2)
-    val discount: BigDecimal,
+    var discount: BigDecimal,
 
     @Column(name = "minBasketValue", precision = 10, scale = 2)
-    val minBasketValue: BigDecimal,
+    var minBasketValue: BigDecimal,
 )
