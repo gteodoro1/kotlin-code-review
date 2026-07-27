@@ -8,6 +8,8 @@ spring:
     database-platform: "org.hibernate.dialect.H2Dialect"
     hibernate:
       ddl-auto: update
+      #FIXED: run data.sql after Hibernate schema set up, needed because we set ddl auto update
+    defer-datasource-initialization: true
   h2:
     console:
       enabled: true
