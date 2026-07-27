@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import schwarz.jobs.interview.coupon.core.domain.Coupon
 import schwarz.jobs.interview.coupon.core.services.CouponService
@@ -53,8 +54,9 @@ class CouponResource(
     }
 
     @GetMapping("/coupons")
-    fun getCoupons(@RequestBody @Valid couponRequestDto: CouponRequestDto): MutableList<Coupon> {
+    //FIXED: remove useles wrap plus follow no body on get convention
+    fun getCoupons(@RequestParam codes: List<String>): MutableList<Coupon> {
 
-        return couponService.getCoupons(couponRequestDto)
+        return couponService.getCoupons(CouponRequestDto(codes = codes))
     }
 }
