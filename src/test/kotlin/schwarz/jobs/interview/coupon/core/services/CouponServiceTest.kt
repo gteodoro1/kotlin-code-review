@@ -6,8 +6,10 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import schwarz.jobs.interview.coupon.BaseObject.baseCoupon
+import schwarz.jobs.interview.coupon.core.domain.Coupon
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
 import schwarz.jobs.interview.coupon.core.services.model.Basket
+import schwarz.jobs.interview.coupon.web.dto.CouponDto
 import java.math.BigDecimal
 import java.util.Optional
 
@@ -46,5 +48,29 @@ class CouponServiceTest {
         val result = couponService.apply(basket, "coupon1")
 
         Assertions.assertNull(result)
+    }
+
+    @Test
+    fun `Should persist a new coupon`() {
+
+        val couponDto = CouponDto(
+            code = "coupon1",
+            discount = BigDecimal("1.0"),
+            minBasketValue = BigDecimal("50.0"),
+        )
+
+        val expectedCoupon = Coupon(
+            code = couponDto.code,
+            discount = couponDto.discount,
+            minBasketValue = couponDto.minBasketValue,
+        )
+
+        every {
+            couponRepository.save(expectedCoupon)
+        } returns expectedCoupon
+
+        couponService.createCoupon(couponDto)
+
+        verify { couponRepository.save(expectedCoupon) }
     }
 }

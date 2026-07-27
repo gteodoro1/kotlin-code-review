@@ -44,10 +44,13 @@ class CouponService(
 
     fun createCoupon(couponDto: CouponDto): Coupon {
 
-        return Coupon(
-            code = couponDto.code,
-            discount = couponDto.discount,
-            minBasketValue = couponDto.minBasketValue,
+        //FIXED: Coupon was built but never persisted
+        return couponRepository.save(
+            Coupon(
+                code = couponDto.code,
+                discount = couponDto.discount,
+                minBasketValue = couponDto.minBasketValue,
+            )
         )
     }
 
