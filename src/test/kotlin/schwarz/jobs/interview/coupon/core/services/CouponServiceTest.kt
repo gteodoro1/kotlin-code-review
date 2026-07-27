@@ -52,6 +52,25 @@ class CouponServiceTest {
     }
 
     @Test
+    fun `Should apply a coupon and mark the basket application successful`() {
+
+        every {
+            couponRepository.findByCode("coupon1")
+        } returns Optional.of(baseCoupon)
+
+        val basket = Basket(
+            value = BigDecimal("100.0"),
+            appliedDiscount = BigDecimal.ZERO,
+            applicationSuccessful = false,
+        )
+
+        val result = couponService.apply(basket, "coupon1")!!
+
+        Assertions.assertEquals(baseCoupon.discount, result.appliedDiscount)
+        Assertions.assertEquals(true, result.applicationSuccessful)
+    }
+
+    @Test
     fun `Should persist a new coupon`() {
 
         val couponDto = CouponDto(

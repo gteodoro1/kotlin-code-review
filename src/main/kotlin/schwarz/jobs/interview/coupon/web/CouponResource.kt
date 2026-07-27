@@ -32,17 +32,14 @@ class CouponResource(
         @RequestBody @Valid applicationRequestDto: ApplicationRequestDto
     ): ResponseEntity<Basket> {
 
-        val basket = couponService.apply(applicationRequestDto.basket, applicationRequestDto.code)
-
-        if (basket == null) {
-            return ResponseEntity.notFound().build()
-        }
-
         if (applicationRequestDto.basket.applicationSuccessful) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build()
         }
 
-        return ResponseEntity.ok().body(applicationRequestDto.basket)
+        val basket = couponService.apply(applicationRequestDto.basket, applicationRequestDto.code)
+            ?: return ResponseEntity.notFound().build()
+
+        return ResponseEntity.ok().body(basket)
     }
 
     @PostMapping("/create")

@@ -9,7 +9,8 @@ data class Basket(
     var applicationSuccessful: Boolean,
 ) {
     fun applyDiscount(discount: BigDecimal) {
-        this.applicationSuccessful = false
+        //Fixed: Boolean was inverted
+        this.applicationSuccessful = true
         this.appliedDiscount = discount
     }
 }
