@@ -79,19 +79,19 @@ class CouponServiceTest {
             minBasketValue = BigDecimal("50.0"),
         )
 
-        val expectedCoupon = Coupon(
-            code = couponDto.code,
-            discount = couponDto.discount,
-            minBasketValue = couponDto.minBasketValue,
-        )
-
-        every {
-            couponRepository.save(expectedCoupon)
-        } returns expectedCoupon
+        every { couponRepository.save(any()) } returns baseCoupon
 
         couponService.createCoupon(couponDto)
 
-        verify { couponRepository.save(expectedCoupon) }
+        verify {
+            couponRepository.save(
+                withArg {
+                    Assertions.assertEquals(couponDto.code, it.code)
+                    Assertions.assertEquals(couponDto.discount, it.discount)
+                    Assertions.assertEquals(couponDto.minBasketValue, it.minBasketValue)
+                }
+            )
+        }
     }
 
     @Test
