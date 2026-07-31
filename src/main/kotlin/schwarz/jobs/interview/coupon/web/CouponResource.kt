@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 import schwarz.jobs.interview.coupon.core.services.CouponService
 import schwarz.jobs.interview.coupon.core.services.model.Basket
 import schwarz.jobs.interview.coupon.web.dto.CouponDto
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDto
 import schwarz.jobs.interview.coupon.web.dto.CouponResponseDto
 
 @RestController
@@ -46,5 +45,5 @@ class CouponResource(
     //FIXED: remove useles wrap plus follow no body on get convention
     //FIXED: map to a response DTO instead of the JPA entity
     fun getCoupons(@RequestParam codes: List<String>): List<CouponResponseDto> =
-        couponService.getCoupons(CouponRequestDto(codes = codes)).map(CouponResponseDto::from)
+        couponService.getCoupons(codes).map(CouponResponseDto::from)
 }

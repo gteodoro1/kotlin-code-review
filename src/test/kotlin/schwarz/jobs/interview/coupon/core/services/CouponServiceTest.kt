@@ -11,7 +11,6 @@ import schwarz.jobs.interview.coupon.core.exception.CouponException
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
 import schwarz.jobs.interview.coupon.core.services.model.Basket
 import schwarz.jobs.interview.coupon.web.dto.CouponDto
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDto
 import java.math.BigDecimal
 import java.util.Optional
 
@@ -224,7 +223,7 @@ class CouponServiceTest {
             couponRepository.findByCode("unknown")
         } returns Optional.empty()
 
-        val coupons = couponService.getCoupons(CouponRequestDto(codes = listOf("coupon1", "unknown")))
+        val coupons = couponService.getCoupons(listOf("coupon1", "unknown"))
 
         Assertions.assertEquals(listOf(baseCoupon), coupons)
     }

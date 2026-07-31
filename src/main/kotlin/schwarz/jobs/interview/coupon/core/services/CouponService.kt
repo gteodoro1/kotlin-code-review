@@ -8,7 +8,6 @@ import schwarz.jobs.interview.coupon.core.exception.CouponException
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository
 import schwarz.jobs.interview.coupon.core.services.model.Basket
 import schwarz.jobs.interview.coupon.web.dto.CouponDto
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDto
 import java.math.BigDecimal
 import java.util.Optional
 
@@ -66,13 +65,10 @@ class CouponService(
             throw CouponException.CouponAlreadyExists(couponDto.code)
         }
 
-    //FIXED: change MutableList to List
-    fun getCoupons(couponRequestDto: CouponRequestDto): List<Coupon> {
-
-        val foundCoupons = mutableListOf<Coupon>()
-        //FIXED: Skip not found codes instead of raising error
-        couponRequestDto.codes.forEach { couponRepository.findByCode(it).ifPresent { coupon -> foundCoupons.add(coupon) } }
-        return foundCoupons
-    }
+    //FIXED: change MutableList to List, and take the codes directly instead of a web DTO,
+    // core should not depend on the web layer
+    //FIXED: Skip not found codes instead of raising error
+    fun getCoupons(codes: List<String>): List<Coupon> =
+        codes.mapNotNull { couponRepository.findByCode(it).orElse(null) }
 
 }
